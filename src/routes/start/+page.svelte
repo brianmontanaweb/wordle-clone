@@ -59,35 +59,34 @@
 <h1>Start!</h1>
 
 <Board>
+	{#await secretWordStart}
+		<h3>loading</h3>
+	{:then data}
+		{#if guesses.length}
+			{#each guesses as word, idx}
+				{#if word && data}
+					<LineItem>
+						{#each verifySecretWord(word, data) as charState, jdx}
+							<CharItem {charState}>
+								{word[jdx]}
+							</CharItem>
+						{/each}
+					</LineItem>
+				{:else}
+					<LineItem>
+						{#each ''.padEnd(WORD_LENGTH) as char, jdx}
+							<CharItem charState={null}>{idx === currentGuessIndex && currentGuessChars[jdx] ? currentGuessChars[jdx] : ''}</CharItem>
+						{/each}
+					</LineItem>
+				{/if}
+			{/each}
+		{/if}
+	{/await}
 	{#if winner}
 		<h3>YOU WON!</h3>
 		<h3>{secretWord}</h3>
-	{:else}
-		{#await secretWordStart}
-			<h3>loading</h3>
-		{:then data}
-			{#if guesses.length}
-				{#each guesses as word, idx}
-					{#if word && data}
-						<LineItem>
-							{#each verifySecretWord(word, data) as charState, jdx}
-								<CharItem {charState}>
-                                    {word[jdx]}
-                                </CharItem>
-							{/each}
-						</LineItem>
-					{:else}
-						<LineItem>
-							{#each ''.padEnd(WORD_LENGTH) as char, jdx}
-								<CharItem charState={null}>{idx === currentGuessIndex && currentGuessChars[jdx] ? currentGuessChars[jdx] : ''}</CharItem>
-							{/each}
-						</LineItem>
-					{/if}
-				{/each}
-			{/if}
-		{/await}
 	{/if}
-</Board>
+</Board> 
 
 <style>
 	h1,

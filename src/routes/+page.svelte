@@ -7,7 +7,7 @@
 <ol>
 	<li>You have six tries to guess the five-letter Wordle of the day.</li>
 	<li>
-		Type in your guess and submit your word by hitting the “enter” key on the Wordle keyboard.
+		Type in your guess and submit your word by hitting the “enter” key on your keyboard.
 	</li>
 	<li>
 		The color of the tiles will change after you submit your word. A yellow tile indicates that you

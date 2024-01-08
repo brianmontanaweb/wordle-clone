@@ -60,10 +60,9 @@
 	{/await}
 	{#if winner}
 		<h3>YOU WON!</h3>
-		<h3>{secretWord}</h3>
 	{:else if currentGuessIndex === -1}
 		<h3>You lost :(</h3>
-		<h3>{secretWord}</h3>
+		<h3>Secret Word is {secretWord}</h3>
 	{/if}
 </section>
 

@@ -27,6 +27,7 @@
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-svelte": "^2.35.1",
 		"husky": "^8.0.3",
+		"jsdom": "^23.2.0",
 		"json-server": "^1.0.0-alpha.13",
 		"prettier": "^3.1.1",
 		"prettier-plugin-svelte": "^3.1.2",

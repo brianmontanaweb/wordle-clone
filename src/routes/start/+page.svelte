@@ -10,14 +10,14 @@
 		secretWordStore,
 		wonGameStore
 	} from 'src/stores/wordle';
-	const base = `http://wordle-clone.com/api`;
+	const base = `http://localhost:3000`;
 
 	async function fetchSecretWord() {
 		try {
 			const res = await fetch(`${base}/wordle`);
 			const data = await res.json();
 			if (data) {
-				const secretWord = getSecretWord(data);
+				const secretWord = getSecretWord(data.words);
 				secretWordStore.update(() => secretWord);
 				return secretWord;
 			} else {
@@ -46,8 +46,9 @@
 	currentGuessStore.subscribe((value) => {
 		currentGuess = value;
 	});
-    $: currentGuessIndex = guesses?.findIndex((guess) => guess == null);
-    $: currentGuessChars = currentGuess;
+	$: currentGuessIndex = guesses?.findIndex((guess) => guess == null);
+	$: currentGuessChars = currentGuess;
+	$: console.log(currentGuessIndex);
 </script>
 
 <svelte:head>
@@ -75,7 +76,11 @@
 				{:else}
 					<LineItem>
 						{#each ''.padEnd(WORD_LENGTH) as char, jdx}
-							<CharItem charState={null}>{idx === currentGuessIndex && currentGuessChars[jdx] ? currentGuessChars[jdx] : ''}</CharItem>
+							<CharItem charState={null}
+								>{idx === currentGuessIndex && currentGuessChars[jdx]
+									? currentGuessChars[jdx]
+									: ''}</CharItem
+							>
 						{/each}
 					</LineItem>
 				{/if}
@@ -85,8 +90,11 @@
 	{#if winner}
 		<h3>YOU WON!</h3>
 		<h3>{secretWord}</h3>
+	{:else if currentGuessIndex === -1}
+		<h3>You lost :(</h3>
+		<h3>{secretWord}</h3>
 	{/if}
-</Board> 
+</Board>
 
 <style>
 	h1,

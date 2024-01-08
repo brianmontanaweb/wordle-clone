@@ -1,8 +1,7 @@
-import { NUMBER_OF_GUESSES, WORD_LENGTH } from 'src/shared/constants/wordle';
+import { NUMBER_OF_GUESSES, WORD_LENGTH } from 'src/lib/constants/wordle';
 import { currentGuessStore, guessesStore, wonGameStore } from 'src/stores/wordle';
 
 export const getSecretWord = (words: string[]): string => {
-	console.log(words);
 	return words[Math.floor(Math.random() * words.length)].toLowerCase();
 };
 

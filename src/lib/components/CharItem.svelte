@@ -1,7 +1,7 @@
-<script>
-    export let charState;
+<script lang="ts">
+	export let charState: number = 3;
 
-    const charStateStyles = ['incorrect', 'close', 'correct'];
+	const charStateStyles = ['incorrect', 'close', 'correct', ''];
 </script>
 
 <span class={charStateStyles[charState]}>
@@ -20,13 +20,13 @@
 		font-size: 30px;
 		margin: 0.5rem;
 	}
-    .correct {
-        background-color: lightgreen;
-    }
-    .incorrect {
-        background-color: lightcoral;
-    }
-    .close {
-        background-color: lightgoldenrodyellow;
-    }
+	.correct {
+		background-color: lightgreen;
+	}
+	.incorrect {
+		background-color: lightcoral;
+	}
+	.close {
+		background-color: lightgoldenrodyellow;
+	}
 </style>

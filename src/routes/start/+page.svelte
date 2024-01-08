@@ -1,9 +1,9 @@
-<script>
-	import Board from 'src/shared/components/board.svelte';
-	import CharItem from 'src/shared/components/charItem.svelte';
-	import LineItem from 'src/shared/components/lineItem.svelte';
-	import { NUMBER_OF_GUESSES, WORD_LENGTH } from 'src/shared/constants/wordle';
-	import { characterKeyPress, getSecretWord, verifySecretWord } from 'src/shared/utils/wordle';
+<script lang="ts">
+	import Board from 'src/lib/components/Board.svelte';
+	import CharItem from 'src/lib/components/CharItem.svelte';
+	import LineItem from 'src/lib/components/WordRow.svelte';
+	import { NUMBER_OF_GUESSES, WORD_LENGTH } from 'src/lib/constants/wordle';
+	import { characterKeyPress, getSecretWord, verifySecretWord } from 'src/lib/utils/wordle';
 	import {
 		currentGuessStore,
 		guessesStore,
@@ -48,7 +48,6 @@
 	});
 	$: currentGuessIndex = guesses?.findIndex((guess) => guess == null);
 	$: currentGuessChars = currentGuess;
-	$: console.log(currentGuessIndex);
 </script>
 
 <svelte:head>
@@ -75,8 +74,8 @@
 					</LineItem>
 				{:else}
 					<LineItem>
-						{#each ''.padEnd(WORD_LENGTH) as char, jdx}
-							<CharItem charState={null}
+						{#each ''.padEnd(WORD_LENGTH) as _, jdx}
+							<CharItem
 								>{idx === currentGuessIndex && currentGuessChars[jdx]
 									? currentGuessChars[jdx]
 									: ''}</CharItem

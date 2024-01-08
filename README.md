@@ -5,5 +5,6 @@ This uses Svelte and json-server for a mock API. This doesn't use a BE mock API,
 ## Getting started
 
 - Run `nvm use` for the correct node version
+  - You might need to run `nvm install` if you don't have the current version
 - Run `npm ci` to install the dependencies based on the package-lock manifest
 - Run `npm start` and navigate to [http://localhost:5173/](http://localhost:5173/)

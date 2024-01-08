@@ -1,12 +1,16 @@
 <script lang="ts">
-	import { currentGuessStore, guessesStore, secretWordStore, wonGameStore } from "src/stores/wordle";
+	import {
+		currentGuessStore,
+		guessesStore,
+		secretWordStore,
+		wonGameStore,
+	} from 'src/stores/wordle';
 	import CharItem from 'src/lib/components/CharItem.svelte';
 	import LineItem from 'src/lib/components/WordRow.svelte';
-	import { NUMBER_OF_GUESSES, WORD_LENGTH } from "../constants/wordle";
-	import { characterKeyPress, verifySecretWord } from "../utils/wordle";
+	import { NUMBER_OF_GUESSES, WORD_LENGTH } from '../constants/wordle';
+	import { characterKeyPress, verifySecretWord } from '../utils/wordle';
 
-    export let secretWordStart: Promise<string | undefined>;
-
+	export let secretWordStart: Promise<string | undefined>;
 
 	let guesses = new Array(NUMBER_OF_GUESSES).fill(null);
 	guessesStore.subscribe((value) => {
@@ -31,13 +35,13 @@
 <svelte:window on:keyup={(event) => characterKeyPress(event, guesses, secretWord)} />
 
 <section>
-    {#await secretWordStart}
+	{#await secretWordStart}
 		<h3>loading</h3>
 	{:then data}
 		{#if guesses.length}
 			{#each guesses as word, idx}
 				{#if word && data}
-					<LineItem> 
+					<LineItem>
 						{#each verifySecretWord(word, data) as charState, jdx}
 							<CharItem {charState}>
 								{word[jdx]}
@@ -65,7 +69,6 @@
 		<h3>Secret Word is {secretWord}</h3>
 	{/if}
 </section>
-
 
 <style>
 	h3 {

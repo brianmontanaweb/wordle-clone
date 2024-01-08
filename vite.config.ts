@@ -10,7 +10,7 @@ const config: UserConfig = {
 		typecheck: {
 			ignoreSourceErrors: true,
 		},
-	}
+	},
 };
 
 export default config;

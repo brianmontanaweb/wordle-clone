@@ -2,7 +2,7 @@
 	"overrides": [{ "files": "*.svelte", "options": { "parser": "svelte" } }],
 	"semi": true,
 	"singleQuote": true,
-	"trailingComma": "none",
+	"trailingComma": "all",
 	"useTabs": true,
 	"printWidth": 100,
 	"plugins": ["prettier-plugin-svelte"],

@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let charState: number = 3;
+	export let charState = 3;
 
 	const charStateStyles = ['incorrect', 'close', 'correct', ''];
 </script>

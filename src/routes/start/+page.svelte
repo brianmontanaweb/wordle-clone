@@ -1,8 +1,8 @@
 <script lang="ts">
-	import Board from 'src/lib/components/Board.svelte';
-	import { BASE_URL } from 'src/lib/constants/wordle';
-	import { getSecretWord } from 'src/lib/utils/wordle';
-	import { secretWordStore } from 'src/stores/wordle';
+	import Board from '$lib/components/Board.svelte';
+	import { BASE_URL } from '$lib/constants/wordle';
+	import { getSecretWord } from '$lib/utils/wordle';
+	import { secretWordStore } from '$src/stores/wordle';
 
 	const fetchSecretWord = async () => {
 		try {

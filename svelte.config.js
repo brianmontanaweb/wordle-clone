@@ -12,9 +12,9 @@ const config = {
 		alias: {
 			$src: path.resolve('./src'),
 			$lib: path.resolve('./src/lib'),
-			$routes: path.resolve('./src/routes')
-		}
-	}
+			$routes: path.resolve('./src/routes'),
+		},
+	},
 };
 
 export default config;

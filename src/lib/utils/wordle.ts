@@ -2,7 +2,7 @@ import { NUMBER_OF_GUESSES, WORD_LENGTH } from '$lib/constants/wordle';
 import { currentGuessStore, guessesStore, wonGameStore } from '$src/stores/wordle';
 
 export const getSecretWord = (words: string[]): string => {
-	return words[Math.floor(Math.random() * words.length)].toLowerCase();
+	return words[Math.floor(Math.random() * words.length)];
 };
 
 export const validateSecretWord = (guess: string, secretWord: string): number[] => {

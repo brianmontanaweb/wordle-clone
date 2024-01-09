@@ -7,7 +7,6 @@
 
     export let secretWordStart: Promise<string | undefined>;
 
-
 	let guesses = new Array(NUMBER_OF_GUESSES).fill(null);
 	guessesStore.subscribe((value) => {
 		guesses = value;
@@ -31,7 +30,7 @@
 <svelte:window on:keyup={(event) => characterKeyPress(event, guesses, secretWord)} />
 
 <section>
-    {#await secretWordStart}
+	{#await secretWordStart}
 		<h3>loading</h3>
 	{:then data}
 		{#if guesses.length}
@@ -61,13 +60,11 @@
 	{/await}
 	{#if winner}
 		<h3>YOU WON!</h3>
-		<h3>{secretWord}</h3>
 	{:else if currentGuessIndex === -1}
 		<h3>You lost :(</h3>
-		<h3>{secretWord}</h3>
+		<h3>Secret Word is {secretWord}</h3>
 	{/if}
 </section>
-
 
 <style>
 	h3 {

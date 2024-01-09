@@ -10,7 +10,9 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		alias: {
-			src: path.resolve('./src'),
+			$src: path.resolve('./src'),
+			$lib: path.resolve('./src/lib'),
+			$routes: path.resolve('./src/routes'),
 		},
 	},
 };

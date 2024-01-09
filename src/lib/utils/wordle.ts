@@ -1,15 +1,12 @@
-import { NUMBER_OF_GUESSES, WORD_LENGTH } from 'src/lib/constants/wordle';
-import { currentGuessStore, guessesStore, wonGameStore } from 'src/stores/wordle';
+import { NUMBER_OF_GUESSES, WORD_LENGTH } from '$lib/constants/wordle';
+import { currentGuessStore, guessesStore, wonGameStore } from '$src/stores/wordle';
 
 export const getSecretWord = (words: string[]): string => {
 	return words[Math.floor(Math.random() * words.length)];
 };
 
-export const verifySecretWord: (guess: string, secretWord: string) => number[] = (
-	guess,
-	secretWord,
-) => {
-	const secretWordMap: { [k: string]: number } = {};
+export const validateSecretWord = (guess: string, secretWord: string): number[] => {
+	const secretWordMap: Record<string, number> = {};
 	const verifiedArr: number[] = new Array(WORD_LENGTH).fill(0);
 	let count = 0;
 
@@ -42,25 +39,21 @@ const getIsLetter = (event: KeyboardEvent): boolean => {
 	return event.key.length === 1 && charCode >= 'a'.charCodeAt(0) && charCode <= 'z'.charCodeAt(0);
 };
 
-export const characterKeyPress: (
-	event: KeyboardEvent,
-	guesses: string[],
-	secretWord: string,
-) => void = (event, guesses, secretWord) => {
+export const characterKeyPress = (event: KeyboardEvent, guesses: string[], secretWord: string) => {
 	if (guesses[NUMBER_OF_GUESSES - 1] !== null || guesses.includes(secretWord)) {
 		return;
 	}
 
-	currentGuessStore.update((prevGuess) => {
+	currentGuessStore.update((prevGuess: string) => {
 		return setCurrentGuess(event, prevGuess, guesses);
 	});
 };
 
-export const setCurrentGuess: (
+export const setCurrentGuess = (
 	event: KeyboardEvent,
 	prevGuess: string,
-	guesses: string[],
-) => string = (event, prevGuess, guesses) => {
+	guesses: string[]
+): string => {
 	const isLetter = getIsLetter(event);
 	if (event.key === 'Backspace') return prevGuess.slice(0, -1);
 	if (event.key === 'Enter' && prevGuess.length === WORD_LENGTH) {

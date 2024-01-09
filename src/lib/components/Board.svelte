@@ -1,16 +1,11 @@
 <script lang="ts">
-	import {
-		currentGuessStore,
-		guessesStore,
-		secretWordStore,
-		wonGameStore,
-	} from 'src/stores/wordle';
-	import CharItem from 'src/lib/components/CharItem.svelte';
-	import LineItem from 'src/lib/components/WordRow.svelte';
-	import { NUMBER_OF_GUESSES, WORD_LENGTH } from '../constants/wordle';
-	import { characterKeyPress, verifySecretWord } from '../utils/wordle';
+	import { currentGuessStore, guessesStore, secretWordStore, wonGameStore } from "$src/stores/wordle";
+	import CharItem from '$lib/components/CharItem.svelte';
+	import LineItem from '$lib/components/WordRow.svelte';
+	import { NUMBER_OF_GUESSES, WORD_LENGTH } from "$lib/constants/wordle";
+	import { characterKeyPress, validateSecretWord } from "$lib/utils/wordle";
 
-	export let secretWordStart: Promise<string | undefined>;
+    export let secretWordStart: Promise<string | undefined>;
 
 	let guesses = new Array(NUMBER_OF_GUESSES).fill(null);
 	guessesStore.subscribe((value) => {
@@ -41,8 +36,9 @@
 		{#if guesses.length}
 			{#each guesses as word, idx}
 				{#if word && data}
-					<LineItem>
-						{#each verifySecretWord(word, data) as charState, jdx}
+					<LineItem> 
+						{@const validatedSecretWord = validateSecretWord(word, data)}
+						{#each validatedSecretWord as charState, jdx}
 							<CharItem {charState}>
 								{word[jdx]}
 							</CharItem>

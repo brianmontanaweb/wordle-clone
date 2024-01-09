@@ -9,7 +9,7 @@
 			const res = await fetch(`${BASE_URL}/wordle`);
 			const data = await res.json();
 			if (data) {
-				const secretWord = getSecretWord(data.words);
+				const secretWord = getSecretWord(data.words).toLowerCase();
 				secretWordStore.update(() => secretWord);
 				return secretWord;
 			} else {

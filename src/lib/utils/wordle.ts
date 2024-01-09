@@ -2,12 +2,12 @@ import { NUMBER_OF_GUESSES, WORD_LENGTH } from 'src/lib/constants/wordle';
 import { currentGuessStore, guessesStore, wonGameStore } from 'src/stores/wordle';
 
 export const getSecretWord = (words: string[]): string => {
-	return words[Math.floor(Math.random() * words.length)].toLowerCase();
+	return words[Math.floor(Math.random() * words.length)];
 };
 
 export const verifySecretWord: (guess: string, secretWord: string) => number[] = (
 	guess,
-	secretWord
+	secretWord,
 ) => {
 	const secretWordMap: { [k: string]: number } = {};
 	const verifiedArr: number[] = new Array(WORD_LENGTH).fill(0);
@@ -45,7 +45,7 @@ const getIsLetter = (event: KeyboardEvent): boolean => {
 export const characterKeyPress: (
 	event: KeyboardEvent,
 	guesses: string[],
-	secretWord: string
+	secretWord: string,
 ) => void = (event, guesses, secretWord) => {
 	if (guesses[NUMBER_OF_GUESSES - 1] !== null || guesses.includes(secretWord)) {
 		return;
@@ -59,7 +59,7 @@ export const characterKeyPress: (
 export const setCurrentGuess: (
 	event: KeyboardEvent,
 	prevGuess: string,
-	guesses: string[]
+	guesses: string[],
 ) => string = (event, prevGuess, guesses) => {
 	const isLetter = getIsLetter(event);
 	if (event.key === 'Backspace') return prevGuess.slice(0, -1);

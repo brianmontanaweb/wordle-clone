@@ -4,12 +4,12 @@
 	const charStateStyles = ['incorrect', 'close', 'correct', ''];
 </script>
 
-<span class={charStateStyles[charState]}>
+<span class="char-item {charStateStyles[charState]}">
 	<slot />
 </span>
 
 <style>
-	span {
+	.char-item {
 		display: flex;
 		justify-content: center;
 		align-items: center;

@@ -52,19 +52,23 @@ export const characterKeyPress = (event: KeyboardEvent, guesses: string[], secre
 export const setCurrentGuess = (
 	event: KeyboardEvent,
 	prevGuess: string,
-	guesses: string[]
+	guesses: string[],
 ): string => {
 	const isLetter = getIsLetter(event);
 	if (event.key === 'Backspace') return prevGuess.slice(0, -1);
 	if (event.key === 'Enter' && prevGuess.length === WORD_LENGTH) {
-		const currentGuessIndex = guesses.findIndex((guess) => guess === null);
-		const guessesClone = [...guesses];
-		guessesClone[currentGuessIndex] = prevGuess;
-		guessesStore.update(() => guessesClone);
+		guessesStore.update(() => checkCurrentGuess(guesses, prevGuess));
 		return '';
 	}
 	if (prevGuess.length < WORD_LENGTH && isLetter) {
 		return prevGuess + event.key.toLowerCase();
 	}
 	return prevGuess;
+};
+
+export const checkCurrentGuess = (guesses: string[], prevGuess: string) => {
+	const currentGuessIndex = guesses.findIndex((guess) => guess === null);
+	const guessesClone = [...guesses];
+	guessesClone[currentGuessIndex] = prevGuess;
+	return guessesClone;
 };

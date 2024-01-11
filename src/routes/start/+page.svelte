@@ -3,6 +3,7 @@
 	import { BASE_URL } from '$lib/constants/wordle';
 	import { getSecretWord } from '$lib/utils/wordle';
 	import { secretWordStore } from '$src/stores/wordle';
+	import Keyboard from '$lib/components/Keyboard.svelte';
 
 	const fetchSecretWord = async () => {
 		try {
@@ -30,6 +31,7 @@
 <h1>Start!</h1>
 
 <Board {secretWordStart} />
+<Keyboard></Keyboard>
 
 <style>
 	h1 {

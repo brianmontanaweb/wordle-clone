@@ -1,8 +1,8 @@
 import { NUMBER_OF_GUESSES, WORD_LENGTH } from '$lib/constants/wordle';
-import { currentGuessStore, guessesStore, wonGameStore } from '$src/stores/wordle';
+import { wordleGameStore, type TGuessesModel } from '$src/stores/wordle';
 
 export const getSecretWord = (words: string[]): string => {
-	return words[Math.floor(Math.random() * words.length)];
+	return words[Math.floor(Math.random() * words.length)].toLowerCase();
 };
 
 export const validateSecretWord = (guess: string, secretWord: string): number[] => {
@@ -20,7 +20,6 @@ export const validateSecretWord = (guess: string, secretWord: string): number[] 
 	}
 
 	if (count >= 5) {
-		wonGameStore.update(() => true);
 		return verifiedArr;
 	}
 
@@ -39,36 +38,34 @@ const getIsLetter = (event: KeyboardEvent): boolean => {
 	return event.key.length === 1 && charCode >= 'a'.charCodeAt(0) && charCode <= 'z'.charCodeAt(0);
 };
 
-export const characterKeyPress = (event: KeyboardEvent, guesses: string[], secretWord: string) => {
-	if (guesses[NUMBER_OF_GUESSES - 1] !== null || guesses.includes(secretWord)) {
-		return;
-	}
-
-	currentGuessStore.update((prevGuess: string) => {
-		return setCurrentGuess(event, prevGuess, guesses);
-	});
-};
-
-export const setCurrentGuess = (
+export const characterKeyPress = (
 	event: KeyboardEvent,
-	prevGuess: string,
-	guesses: string[],
-): string => {
+	guessesModel: TGuessesModel,
+	secretWord: string | null,
+) => {
+	const { guesses } = guessesModel;
+	let { isWinner } = guessesModel;
+	if (!secretWord || isWinner || guesses.length > NUMBER_OF_GUESSES) return;
 	const isLetter = getIsLetter(event);
-	if (event.key === 'Backspace') return prevGuess.slice(0, -1);
-	if (event.key === 'Enter' && prevGuess.length === WORD_LENGTH) {
-		guessesStore.update(() => checkCurrentGuess(guesses, prevGuess));
-		return '';
+	const currentGuess = guesses[guesses.length - 1] || '';
+	if (currentGuess && event.key === 'Backspace') {
+		guesses[guesses.length - 1] = currentGuess.slice(0, -1);
+	} else if (event.key === 'Enter' && currentGuess.length === WORD_LENGTH) {
+		isWinner = validateSecretWord(currentGuess, secretWord).every((val) => val === 2);
+		guesses.push('');
+	} else if (currentGuess?.length < WORD_LENGTH && isLetter) {
+		guesses[guesses.length - 1] = currentGuess + event.key.toLowerCase();
 	}
-	if (prevGuess.length < WORD_LENGTH && isLetter) {
-		return prevGuess + event.key.toLowerCase();
-	}
-	return prevGuess;
+	wordleGameStore.update((state) => ({
+		...state,
+		guesses,
+		isWinner,
+	}));
 };
 
-export const checkCurrentGuess = (guesses: string[], prevGuess: string) => {
-	const currentGuessIndex = guesses.findIndex((guess) => guess === null);
-	const guessesClone = [...guesses];
-	guessesClone[currentGuessIndex] = prevGuess;
-	return guessesClone;
-};
+export const resetGame = (secretWord: string) =>
+	wordleGameStore.set({
+		guesses: [''],
+		isWinner: false,
+		secretWord,
+	});

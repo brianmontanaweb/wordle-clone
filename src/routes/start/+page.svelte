@@ -2,17 +2,21 @@
 	import Board from '$lib/components/Board.svelte';
 	import { BASE_URL } from '$lib/constants/wordle';
 	import { getSecretWord } from '$lib/utils/wordle';
-	import { secretWordStore } from '$src/stores/wordle';
+	import { secretWordStore, wordleGameStore } from '$src/stores/wordle';
 	import Keyboard from '$lib/components/Keyboard.svelte';
+	import { onMount } from 'svelte';
+
+	$: isGameLoading = true;
 
 	const fetchSecretWord = async () => {
 		try {
 			const res = await fetch(`${BASE_URL}/wordle`);
 			const data = await res.json();
 			if (data) {
-				const secretWord = getSecretWord(data.words).toLowerCase();
-				secretWordStore.update(() => secretWord);
-				return secretWord;
+				const secretWord = getSecretWord(data.words);
+				secretWordStore.set(data.words);
+				wordleGameStore.update((state) => ({ ...state, secretWord }));
+				isGameLoading = false;
 			} else {
 				throw new Error('No data present');
 			}
@@ -21,7 +25,9 @@
 		}
 	};
 
-	let secretWordStart = fetchSecretWord();
+	onMount(() => {
+		fetchSecretWord();
+	});
 </script>
 
 <svelte:head>
@@ -30,11 +36,16 @@
 
 <h1>Start!</h1>
 
-<Board {secretWordStart} />
-<Keyboard></Keyboard>
+{#if isGameLoading}
+	<h3>loading</h3>
+{:else}
+	<Board />
+	<Keyboard />
+{/if}
 
 <style>
-	h1 {
+	h1,
+	h3 {
 		text-align: center;
 		text-transform: uppercase;
 	}

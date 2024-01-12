@@ -1,79 +1,61 @@
 <script lang="ts">
-	import {
-		currentGuessStore,
-		guessesStore,
-		secretWordStore,
-		wonGameStore,
-	} from '$src/stores/wordle';
+	import { wordleGameStore, type TGuessesModel, secretWordStore } from '$src/stores/wordle';
 	import CharItem from '$lib/components/CharItem.svelte';
 	import LineItem from '$lib/components/WordRow.svelte';
 	import { NUMBER_OF_GUESSES, WORD_LENGTH } from '$lib/constants/wordle';
-	import { characterKeyPress, validateSecretWord } from '$lib/utils/wordle';
+	import {
+		characterKeyPress,
+		getSecretWord,
+		resetGame,
+		validateSecretWord,
+	} from '$lib/utils/wordle';
 
-	export let secretWordStart: Promise<string | undefined>;
-
-	let guesses = new Array(NUMBER_OF_GUESSES).fill(null);
-	guessesStore.subscribe((value) => {
-		guesses = value;
+	let guessesModel: TGuessesModel;
+	wordleGameStore.subscribe((state) => {
+		guessesModel = state;
 	});
-	let winner = false;
-	wonGameStore.subscribe((value) => {
-		winner = value;
-	});
-	let secretWord = '';
-	secretWordStore.subscribe((value) => {
-		secretWord = value;
-	});
-	let currentGuess = '';
-	currentGuessStore.subscribe((value) => {
-		currentGuess = value;
-	});
-	$: currentGuessIndex = guesses?.findIndex((guess) => guess == null);
-	$: currentGuessChars = currentGuess;
+	$: ({ guesses, isWinner, secretWord } = guessesModel);
+	$: currentGuessIndex = guesses.length - 1;
+	$: console.log(secretWord);
 </script>
 
-<svelte:window on:keyup={(event) => characterKeyPress(event, guesses, secretWord)} />
+<svelte:window on:keyup={(event) => characterKeyPress(event, guessesModel, secretWord)} />
 
 <section>
-	{#await secretWordStart}
-		<h3>loading</h3>
-	{:then data}
-		{#if guesses.length}
-			{#each guesses as word, idx}
-				{#if word && data}
-					<LineItem>
-						{@const validatedSecretWord = validateSecretWord(word, data)}
-						{#each validatedSecretWord as charState, jdx}
-							<CharItem {charState}>
-								{word[jdx]}
-							</CharItem>
-						{/each}
-					</LineItem>
-				{:else}
-					<LineItem>
-						{#each ''.padEnd(WORD_LENGTH) as _, jdx}
-							<CharItem
-								>{idx === currentGuessIndex && currentGuessChars[jdx]
-									? currentGuessChars[jdx]
-									: ''}</CharItem
-							>
-						{/each}
-					</LineItem>
-				{/if}
-			{/each}
-		{/if}
-	{/await}
-	{#if winner}
-		<h3>YOU WON!</h3>
-	{:else if currentGuessIndex === -1}
-		<h3>You lost :(</h3>
-		<h3>Secret Word is {secretWord}</h3>
+	{#if secretWord}
+		{#each new Array(NUMBER_OF_GUESSES).fill('') as _, idx}
+			{#if currentGuessIndex > idx && secretWord}
+				<LineItem>
+					{@const validatedSecretWord = validateSecretWord(guesses[idx], secretWord)}
+					{#each guesses[idx] as charState, jdx}
+						<CharItem charState={validatedSecretWord[jdx]}>
+							{charState ?? ''}
+						</CharItem>
+					{/each}
+				</LineItem>
+			{:else}
+				<LineItem>
+					{#each ''.padEnd(WORD_LENGTH) as _, jdx}
+						<CharItem>{guesses?.[idx]?.[jdx] ?? ''}</CharItem>
+					{/each}
+				</LineItem>
+			{/if}
+		{/each}
 	{/if}
+	<div class="results-container">
+		{#if isWinner}
+			<h3>You won!</h3>
+			<button on:click={() => resetGame(getSecretWord($secretWordStore))}>New game</button>
+		{:else if currentGuessIndex > WORD_LENGTH}
+			<h3>You lost :(</h3>
+			<h3>The word is {secretWord}</h3>
+			<button on:click={() => resetGame(getSecretWord($secretWordStore))}>New game</button>
+		{/if}
+	</div>
 </section>
 
 <style>
-	h3 {
+	.results-container {
 		text-align: center;
-		text-transform: uppercase;
 	}
 </style>

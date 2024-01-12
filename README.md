@@ -15,4 +15,4 @@ This uses Svelte and json-server for a mock API. This doesn't use a BE mock API,
 
 ### Game:
 
-<img width="484" alt="Screenshot 2024-01-10 at 8 41 20 PM" src="https://github.com/brianmontanaweb/wordle-clone/assets/4666838/2595f8b5-d730-4b9a-a350-4e5547fe7edc">
+<img width="451" alt="Screenshot 2024-01-12 at 1 01 49 PM" src="https://github.com/brianmontanaweb/wordle-clone/assets/4666838/076e5b50-85dd-40fe-aa97-b08dcfeedb39">
